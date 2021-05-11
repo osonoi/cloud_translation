@@ -1,5 +1,8 @@
 # translation
 
+gcpの環境変数設定
+export GOOGLE_APPLICATION_CREDENTIALS=gcp.json
+
 ## ローカルでの起動
 
 ```
