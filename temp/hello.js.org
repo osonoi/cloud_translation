@@ -1,0 +1,50 @@
+const express = require('express');
+const router = express.Router();
+
+// Watson
+const PersonalityInsightsV3 = require('ibm-watson/personality-insights/v3');
+const { IamAuthenticator } = require('ibm-watson/auth');
+const fs = require("fs");
+
+const personalityInsights = new PersonalityInsightsV3({
+  authenticator: new IamAuthenticator({ apikey: 'PHDuoqY7wGHGjBSZQWXdmOZDZ-duyhBpKvblURaWGORn' }),
+  version: '2019-10-19',
+  serviceUrl: 'https://api.us-south.personality-insights.watson.cloud.ibm.com/instances/917c6c85-5cbe-4b92-ab70-911d2fb5f2f7'
+});
+// Watson
+
+router.get('/', (req, res, next) => {
+  var data = {
+    title: 'Hello!',
+    content: '※何か書いて送信して下さい。'
+  };
+  res.render('hello', data);
+});
+
+router.post('/post', (req, res, next) => {
+  var msg = req.body['message'];
+
+// Watson
+personalityInsights.profile(
+  {
+    content: msg,
+    contentType: 'text/plain',
+    accept: 'application/json',
+    contentLanguage: 'ja',
+    acceptLanguage: 'ja',
+  })
+
+  .then(response => {
+    var data = {
+      title: 'Hello!',
+      content: 'あなたの、「' + response.result.personality[1]["name"] + '』は' + response.result.personality[1]["percentile"] + '％でした。'
+    };
+    res.render('hello', data);
+  })
+
+  .catch(err => {
+    console.log('error: ', err);
+ });
+});
+
+module.exports = router;
