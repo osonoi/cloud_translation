@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "LD_PRELOAD='/opt/app-root/src/node_modules/sharp/vendor/lib/libz.so' node ./bin/www"
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "@google-cloud/translate": "^6.2.0",
